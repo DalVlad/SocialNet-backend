@@ -12,7 +12,7 @@
 	<artifactId>SocialNet-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>SocialNet-backend</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Practice project - social network</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -64,6 +64,19 @@
 			<artifactId>springfox-boot-starter</artifactId>
 			<version>3.0.0</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>3.1.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>4.3.0</version>
+		</dependency>
+
 
 	</dependencies>
 

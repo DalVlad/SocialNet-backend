@@ -10,34 +10,37 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig{
 
     private final PersonDetailsService personDetailsService;
+    private final JWTFilter jwtFilter;
 
     @Autowired
-    public SecurityConfig(PersonDetailsService personDetailsService) {
+    public SecurityConfig(PersonDetailsService personDetailsService, JWTFilter jwtFilter) {
         this.personDetailsService = personDetailsService;
+        this.jwtFilter = jwtFilter;
     }
 
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
-        return http
+        return http.csrf().disable()
                 .authorizeHttpRequests((authz) -> authz
-                        .antMatchers("/login", "/error", "/auth/registration")
+                        .antMatchers("/auth/login", "/error", "/auth/registration")
                         .permitAll()
                         .anyRequest().authenticated())
-                .csrf().disable()
-                .formLogin().loginProcessingUrl("/auth/login")
-                .defaultSuccessUrl("/hello", true)
-                .and()
                 .httpBasic(Customizer.withDefaults())
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
