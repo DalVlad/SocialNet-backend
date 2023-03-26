@@ -5,6 +5,7 @@ import com.practice.SocialNetbackend.service.PersonDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -34,6 +35,7 @@ public class SecurityConfig{
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         return http.csrf().disable()
                 .authorizeHttpRequests((authz) -> authz
+                        .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .antMatchers("/auth/login", "/error", "/auth/registration")
                         .permitAll()
                         .anyRequest().authenticated())
