@@ -8,14 +8,13 @@ import com.practice.SocialNetbackend.security.JWTUtil;
 import com.practice.SocialNetbackend.service.RegistrationService;
 import com.practice.SocialNetbackend.util.PersonNotRegisteringException;
 import com.practice.SocialNetbackend.util.PersonValidator;
-import com.practice.SocialNetbackend.util.ResponseMessageError;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -59,14 +58,9 @@ public class AuthController {
     public Map<String, String> performLogin(@RequestBody AuthenticationDTO authenticationDTO){
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(authenticationDTO.getLogin(), authenticationDTO.getPassword());
-        try {
-            authenticationManager.authenticate(authenticationToken);
-        }catch (BadCredentialsException e){
-            return Map.of("message", "Incorrect credentials");
-        }
+        authenticationManager.authenticate(authenticationToken);
         String token = jwtUtil.generateToken(authenticationDTO.getLogin());
         return Map.of("jwt", token);
-
     }
 
     private Person convertToPerson(PersonDTO personDTO){
@@ -82,9 +76,13 @@ public class AuthController {
     }
 
     @ExceptionHandler
-    private ResponseEntity<ResponseMessageError> personNotRegisteringException(PersonNotRegisteringException e){
-        ResponseMessageError response = new ResponseMessageError(e.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    private ResponseEntity<PersonNotRegisteringException> personNotRegisteringException(PersonNotRegisteringException e){
+        return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<AuthenticationException> authenticationException(AuthenticationException e){
+        return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
     }
 
 }
