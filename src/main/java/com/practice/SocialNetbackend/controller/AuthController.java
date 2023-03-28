@@ -8,6 +8,9 @@ import com.practice.SocialNetbackend.security.JWTUtil;
 import com.practice.SocialNetbackend.service.RegistrationService;
 import com.practice.SocialNetbackend.util.PersonNotRegisteringException;
 import com.practice.SocialNetbackend.util.PersonValidator;
+import com.practice.SocialNetbackend.util.ResponseMessageError;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +29,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/auth")
 @CrossOrigin
+@Api
 public class AuthController {
 
     private final PersonValidator personValidator;
@@ -44,11 +48,12 @@ public class AuthController {
     }
 
     @PostMapping("/registration")
+    @ApiOperation("Registration person")
     public Map<String, String> registration(@RequestBody @Valid PersonDTO personDTO, BindingResult bindingResult){
         Person person = convertToPerson(personDTO);
         personValidator.validate(person, bindingResult);
         if(bindingResult.hasErrors()){
-            throw new PersonNotRegisteringException(createErrorMsg(bindingResult.getFieldErrors()));
+            throw new PersonNotRegisteringException(ResponseMessageError.createErrorMsg(bindingResult.getFieldErrors()));
         }
         registrationService.registration(person);
         String token = jwtUtil.generateToken(person.getLogin());
@@ -56,6 +61,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @ApiOperation("Login person")
     public Map<String, String> performLogin(@RequestBody AuthenticationDTO authenticationDTO){
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(authenticationDTO.getLogin(), authenticationDTO.getPassword());
@@ -66,14 +72,6 @@ public class AuthController {
 
     private Person convertToPerson(PersonDTO personDTO){
         return modelMapper.map(personDTO, Person.class);
-    }
-
-    private String createErrorMsg(List<FieldError> errors){
-        StringBuilder errorMsg = new StringBuilder();
-        for(FieldError error: errors){
-            errorMsg.append(error.getField()).append(" - ").append(error.getDefaultMessage()).append(";");
-        }
-        return errorMsg.toString();
     }
 
     @ExceptionHandler
