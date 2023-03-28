@@ -1,18 +1,19 @@
 
 server.port=8080
 spring.datasource.driver-class-name=org.postgresql.Driver
-spring.datasource.url=
+spring.datasource.url=jdbc:postgresql://localhost:5432
 spring.datasource.username=
 spring.datasource.password=
-spring.jpa.hibernate.ddl-auto=none
-
-spring.jackson.deserialization.fail-on-unknown-properties=true
-
+spring.jpa.hibernate.ddl-auto=validate
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 spring.jpa.show-sql=true
+
+spring.jackson.deserialization.fail-on-unknown-properties=true
 
 spring.mvc.hiddenmethod.filter.enabled=true
 
 spring.liquibase.change-log=classpath:/db/changelog/liquibase-changelog.xml
+
+spring.servlet.multipart.max-file-size=10000MB
 
 jwt_secret=
