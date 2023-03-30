@@ -8,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -16,22 +17,36 @@ import java.util.List;
 public class Person {
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
 
-    @Column(name = "login")
+
     @Size(min = 3, max = 255, message = "login должен быть от 3 до 255 символов")
     @NotBlank
     @NotNull
+    @Column(name = "login")
     private String login;
 
-    @Column(name = "password")
+
     @NotBlank
     @NotNull
+    @Column(name = "password")
     private String password;
 
     @OneToMany(mappedBy = "person")
     private List<Catalog> catalogs;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return id == person.id && Objects.equals(login, person.login);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, login);
+    }
 }

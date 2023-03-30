@@ -20,8 +20,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/file")
@@ -30,12 +28,10 @@ import java.util.regex.Pattern;
 public class FileController {
 
     private final FileService fileService;
-    private final PersonService personService;
     private final CatalogService catalogService;
 
-    public FileController(FileService fileService, PersonService personService, CatalogService catalogService) {
+    public FileController(FileService fileService, CatalogService catalogService) {
         this.fileService = fileService;
-        this.personService = personService;
         this.catalogService = catalogService;
     }
 
@@ -55,7 +51,7 @@ public class FileController {
         String catalogName = pathCatalog.substring(0, lastSlashIndex == 0 ? 1 : lastSlashIndex);
         String fileName = pathCatalog.substring(lastSlashIndex + 1);
         Catalog catalog = catalogService.getByPathAndPerson(catalogName, person);
-        File file = fileService.getFile(fileName, catalog);
+        File file = fileService.getFile(fileName, catalog, catalogName);
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(file.getExtension()))
                 .body(file.getFile());

@@ -1,6 +1,7 @@
 package com.practice.SocialNetbackend.service;
 
 import com.practice.SocialNetbackend.model.Catalog;
+import com.practice.SocialNetbackend.model.PathCatalog;
 import com.practice.SocialNetbackend.model.Person;
 import com.practice.SocialNetbackend.repositorie.CatalogRepository;
 import com.practice.SocialNetbackend.repositorie.PersonRepository;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
 
 @Service
 @Transactional(readOnly = true)
@@ -28,7 +31,7 @@ public class RegistrationService {
     public void registration(Person person){
         person.setPassword(passwordEncoder.encode(person.getPassword()));
         Catalog catalog = new Catalog();
-        catalog.setPath("/");
+        catalog.setPathCatalogs(Collections.singletonList(new PathCatalog("/", catalog)));
         catalog.setPerson(person);
         personRepository.save(person);
         catalogService.save(catalog);

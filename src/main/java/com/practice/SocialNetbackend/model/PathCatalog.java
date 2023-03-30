@@ -6,52 +6,49 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Getter
 @Setter
-@Table(name = "file")
-public class File {
+@Table(name = "path_catalog")
+public class PathCatalog {
+
+    public PathCatalog(String path, Catalog catalog) {
+        this.path = path;
+        this.catalog = catalog;
+    }
+
+    public PathCatalog(){}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
+    @Column(name = "id")
     private long id;
 
     @NotNull
     @NotBlank
-    @Column(name = "extension")
-    private String extension;
-
-    @Column(name = "name")
-    private String name;
-
-    @Lob
-    @Column(name = "file_byte")
-    private byte[] file;
-
-    @ManyToOne
-    @JoinColumn(name = "path_catalog_id", referencedColumnName = "id")
-    private PathCatalog pathCatalog;
+    @Column(name = "path")
+    private String path;
 
     @ManyToOne
     @JoinColumn(name = "catalog_id", referencedColumnName = "id")
     private Catalog catalog;
 
-
+    @OneToMany(mappedBy = "pathCatalog")
+    private List<File> files;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        File file = (File) o;
-        return id == file.id;
+        PathCatalog that = (PathCatalog) o;
+        return id == that.id;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id);
     }
-
 }
