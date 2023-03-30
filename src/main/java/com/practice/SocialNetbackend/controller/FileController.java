@@ -1,12 +1,11 @@
 package com.practice.SocialNetbackend.controller;
 
-import com.practice.SocialNetbackend.model.Catalog;
+import com.practice.SocialNetbackend.model.Storage;
 import com.practice.SocialNetbackend.model.File;
 import com.practice.SocialNetbackend.model.Person;
 import com.practice.SocialNetbackend.security.PersonDetails;
-import com.practice.SocialNetbackend.service.CatalogService;
+import com.practice.SocialNetbackend.service.StorageService;
 import com.practice.SocialNetbackend.service.FileService;
-import com.practice.SocialNetbackend.service.PersonService;
 import com.practice.SocialNetbackend.util.CatalogNotFoundException;
 import com.practice.SocialNetbackend.util.FileNotFoundException;
 import com.practice.SocialNetbackend.util.NotCreationException;
@@ -28,11 +27,11 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileController {
 
     private final FileService fileService;
-    private final CatalogService catalogService;
+    private final StorageService storageService;
 
-    public FileController(FileService fileService, CatalogService catalogService) {
+    public FileController(FileService fileService, StorageService storageService) {
         this.fileService = fileService;
-        this.catalogService = catalogService;
+        this.storageService = storageService;
     }
 
     @PostMapping("/catalog")
@@ -50,8 +49,8 @@ public class FileController {
         int lastSlashIndex = pathCatalog.lastIndexOf("/");
         String catalogName = pathCatalog.substring(0, lastSlashIndex == 0 ? 1 : lastSlashIndex);
         String fileName = pathCatalog.substring(lastSlashIndex + 1);
-        Catalog catalog = catalogService.getByPathAndPerson(catalogName, person);
-        File file = fileService.getFile(fileName, catalog, catalogName);
+        Storage storage = storageService.getByPathAndPerson(catalogName, person);
+        File file = fileService.getFile(fileName, storage, catalogName);
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(file.getExtension()))
                 .body(file.getFile());

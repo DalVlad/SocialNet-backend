@@ -1,9 +1,9 @@
 package com.practice.SocialNetbackend.service;
 
 import com.practice.SocialNetbackend.model.File;
-import com.practice.SocialNetbackend.model.Catalog;
+import com.practice.SocialNetbackend.model.Storage;
 import com.practice.SocialNetbackend.model.Person;
-import com.practice.SocialNetbackend.repositorie.CatalogRepository;
+import com.practice.SocialNetbackend.repositorie.StorageRepository;
 import com.practice.SocialNetbackend.repositorie.FileRepository;
 import com.practice.SocialNetbackend.repositorie.PathCatalogRepository;
 import com.practice.SocialNetbackend.util.CatalogNotFoundException;
@@ -21,12 +21,12 @@ import java.io.InputStream;
 public class FileService {
 
     private final FileRepository fileRepository;
-    private final CatalogRepository catalogRepository;
+    private final StorageRepository storageRepository;
     private final PathCatalogRepository pathCatalogRepository;
 
-    public FileService(FileRepository fileRepository, CatalogRepository catalogRepository, PathCatalogRepository pathCatalogRepository) {
+    public FileService(FileRepository fileRepository, StorageRepository storageRepository, PathCatalogRepository pathCatalogRepository) {
         this.fileRepository = fileRepository;
-        this.catalogRepository = catalogRepository;
+        this.storageRepository = storageRepository;
         this.pathCatalogRepository = pathCatalogRepository;
     }
 
@@ -35,11 +35,11 @@ public class FileService {
         File saveFile = new File();
         saveFile.setExtension(file.getContentType());
         saveFile.setName(file.getOriginalFilename());
-        Catalog catalog = catalogRepository.findByPathAndPerson(pathCatalog, person)
+        Storage storage = storageRepository.findByPathAndPerson(pathCatalog, person)
                 .orElseThrow(() -> new CatalogNotFoundException(String.format("Catalog with path %s not found", pathCatalog)));
-        saveFile.setPathCatalog(pathCatalogRepository.findByPathAndCatalog(pathCatalog, catalog)
+        saveFile.setPathCatalog(pathCatalogRepository.findByPathAndStorage(pathCatalog, storage)
                 .orElseThrow(() -> new CatalogNotFoundException(String.format("Catalog with path %s not found", pathCatalog))));
-        saveFile.setCatalog(catalog);
+//        saveFile.setStorage(storage);
         try(InputStream is = file.getInputStream()){
             saveFile.setFile(is.readAllBytes());
         }catch (IOException e){
@@ -48,8 +48,8 @@ public class FileService {
         fileRepository.save(saveFile);
     }
 
-    public File getFile(String name, Catalog catalog, String pathCatalog) throws FileNotFoundException {
-        return fileRepository.findByNameAndPathCatalog(name, catalog.getPathCatalogs()
+    public File getFile(String name, Storage storage, String pathCatalog) throws FileNotFoundException {
+        return fileRepository.findByNameAndPathCatalog(name, storage.getPathCatalogs()
                 .stream().filter((pathCatalog1 -> pathCatalog.equals(pathCatalog1.getPath()))).findAny()
                 .orElseThrow(() -> new CatalogNotFoundException("Catalog with name '" + pathCatalog + "' not found")))
                 .orElseThrow(() -> new FileNotFoundException("File with name '" + name + "' in catalog '"+ pathCatalog +"' not found"));

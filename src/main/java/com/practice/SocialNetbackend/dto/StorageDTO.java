@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class CatalogDTO {
+public class StorageDTO {
 
     private List<PathCatalogDTO> pathCatalogs;
 

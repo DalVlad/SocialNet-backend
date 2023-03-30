@@ -1,7 +1,7 @@
 package com.practice.SocialNetbackend.controller;
 
 import com.practice.SocialNetbackend.security.PersonDetails;
-import com.practice.SocialNetbackend.service.CatalogService;
+import com.practice.SocialNetbackend.service.StorageService;
 import com.practice.SocialNetbackend.service.FileService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,11 +14,11 @@ public class CatalogController {
 
 
     private final FileService fileService;
-    private final CatalogService catalogService;
+    private final StorageService storageService;
 
-    public CatalogController(FileService fileService, CatalogService catalogService) {
+    public CatalogController(FileService fileService, StorageService storageService) {
         this.fileService = fileService;
-        this.catalogService = catalogService;
+        this.storageService = storageService;
     }
 
 

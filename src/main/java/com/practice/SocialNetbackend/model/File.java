@@ -35,12 +35,6 @@ public class File {
     @JoinColumn(name = "path_catalog_id", referencedColumnName = "id")
     private PathCatalog pathCatalog;
 
-    @ManyToOne
-    @JoinColumn(name = "catalog_id", referencedColumnName = "id")
-    private Catalog catalog;
-
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

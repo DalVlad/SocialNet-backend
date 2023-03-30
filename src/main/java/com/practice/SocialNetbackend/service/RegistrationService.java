@@ -1,9 +1,9 @@
 package com.practice.SocialNetbackend.service;
 
-import com.practice.SocialNetbackend.model.Catalog;
+import com.practice.SocialNetbackend.model.Storage;
 import com.practice.SocialNetbackend.model.PathCatalog;
 import com.practice.SocialNetbackend.model.Person;
-import com.practice.SocialNetbackend.repositorie.CatalogRepository;
+import com.practice.SocialNetbackend.repositorie.StorageRepository;
 import com.practice.SocialNetbackend.repositorie.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,10 +18,10 @@ public class RegistrationService {
 
     private final PersonRepository personRepository;
     private final PasswordEncoder passwordEncoder;
-    private final CatalogRepository catalogService;
+    private final StorageRepository catalogService;
 
     @Autowired
-    public RegistrationService(PersonRepository personRepository, PasswordEncoder passwordEncoder, CatalogRepository catalogService) {
+    public RegistrationService(PersonRepository personRepository, PasswordEncoder passwordEncoder, StorageRepository catalogService) {
         this.personRepository = personRepository;
         this.passwordEncoder = passwordEncoder;
         this.catalogService = catalogService;
@@ -30,11 +30,11 @@ public class RegistrationService {
     @Transactional
     public void registration(Person person){
         person.setPassword(passwordEncoder.encode(person.getPassword()));
-        Catalog catalog = new Catalog();
-        catalog.setPathCatalogs(Collections.singletonList(new PathCatalog("/", catalog)));
-        catalog.setPerson(person);
+        Storage storage = new Storage();
+        storage.setPathCatalogs(Collections.singletonList(new PathCatalog("/", storage)));
+        storage.setPerson(person);
         personRepository.save(person);
-        catalogService.save(catalog);
+        catalogService.save(storage);
     }
 
 }

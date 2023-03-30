@@ -10,19 +10,19 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
-@Table(name = "catalog")
-public class Catalog {
+@Table(name = "storage")
+public class Storage {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToMany(mappedBy = "catalog", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "storage", cascade = CascadeType.ALL)
     private List<PathCatalog> pathCatalogs;
 
-    @OneToMany(mappedBy = "catalog")
-    private List<File> files;
+//    @OneToMany(mappedBy = "storage")
+//    private List<File> files;
 
     @ManyToOne
     @JoinColumn(name = "person_id", referencedColumnName = "id")
@@ -32,8 +32,8 @@ public class Catalog {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Catalog catalog = (Catalog) o;
-        return id == catalog.id;
+        Storage storage = (Storage) o;
+        return id == storage.id;
     }
 
     @Override

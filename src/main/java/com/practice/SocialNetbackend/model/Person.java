@@ -35,7 +35,7 @@ public class Person {
     private String password;
 
     @OneToMany(mappedBy = "person")
-    private List<Catalog> catalogs;
+    private List<Storage> storages;
 
     @Override
     public boolean equals(Object o) {

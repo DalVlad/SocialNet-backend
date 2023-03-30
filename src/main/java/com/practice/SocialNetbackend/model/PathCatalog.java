@@ -15,9 +15,9 @@ import java.util.Objects;
 @Table(name = "path_catalog")
 public class PathCatalog {
 
-    public PathCatalog(String path, Catalog catalog) {
+    public PathCatalog(String path, Storage storage) {
         this.path = path;
-        this.catalog = catalog;
+        this.storage = storage;
     }
 
     public PathCatalog(){}
@@ -33,8 +33,8 @@ public class PathCatalog {
     private String path;
 
     @ManyToOne
-    @JoinColumn(name = "catalog_id", referencedColumnName = "id")
-    private Catalog catalog;
+    @JoinColumn(name = "storage_id", referencedColumnName = "id")
+    private Storage storage;
 
     @OneToMany(mappedBy = "pathCatalog")
     private List<File> files;
