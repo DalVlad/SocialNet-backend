@@ -19,15 +19,13 @@ public class StorageService {
         this.storageRepository = storageRepository;
     }
 
-    public Storage getById(long id){
-        return storageRepository.findById(id).orElseThrow(() -> new CatalogNotFoundException("Catalog not found"));
-    }
-
     public Storage getByPathAndPerson(String path, Person person){
-        PathCatalog pathCatalog = new PathCatalog();
-        pathCatalog.setPath(path);
         return storageRepository.findByPathAndPerson(path, person)
                         .orElseThrow(() -> new CatalogNotFoundException("Catalog with path '" + path + "' not found"));
+    }
+
+    public Storage getByPerson(Person person){
+        return storageRepository.findByPerson(person).orElseThrow(() -> new CatalogNotFoundException("Storage not found"));
     }
 
 

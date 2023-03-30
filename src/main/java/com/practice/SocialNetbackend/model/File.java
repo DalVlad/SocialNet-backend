@@ -2,6 +2,7 @@ package com.practice.SocialNetbackend.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -28,6 +29,7 @@ public class File {
     private String name;
 
     @Lob
+    @Type(type = "org.hibernate.type.ImageType")
     @Column(name = "file_byte")
     private byte[] file;
 
