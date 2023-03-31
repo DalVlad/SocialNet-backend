@@ -13,4 +13,6 @@ public class PathCatalogDTO {
 
     private List<FileDTO> files;
 
+    private List<PathCatalogDTO> pathCatalogs;
+
 }

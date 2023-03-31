@@ -39,6 +39,13 @@ public class PathCatalog {
     @OneToMany(mappedBy = "pathCatalog")
     private List<File> files;
 
+    @OneToMany(mappedBy = "parent", orphanRemoval = true)
+    private List<PathCatalog> pathCatalogs;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private PathCatalog parent;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
