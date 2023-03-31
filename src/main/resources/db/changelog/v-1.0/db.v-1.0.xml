@@ -5,19 +5,10 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
-    
-    <preConditions>
-        <dbms type="postgresql"/>
-    </preConditions>
 
-    <changeSet id="0" author="DalVlad">
-        <tagDatabase tag="db_init"/>
-    </changeSet>
-    
-    <include file="v-1.0/db.v-1.0.xml" relativeToChangelogFile="true"  />
+    <include file="01-changeset-person-table.xml" relativeToChangelogFile="true" />
+    <include file="10-changeset-pathCatalog-table.xml" relativeToChangelogFile="true" />
+    <include file="20-changeset-file-table.xml" relativeToChangelogFile="true" />
+    <include file="30-changeset-storage-table.xml" relativeToChangelogFile="true" />
 
-    <changeSet id="1" author="DalVlad">
-        <tagDatabase tag="v-1.0"/>
-    </changeSet>
-    
 </databaseChangeLog>
