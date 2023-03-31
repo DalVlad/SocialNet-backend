@@ -25,11 +25,4 @@ public class StorageService {
                         .orElseThrow(() -> new CatalogNotFoundException("Storage not found"));
     }
 
-    public Storage getByPersonOnlyWithRootCatalog(Person person){
-        Storage storage = storageRepository.findByPerson(person).orElseThrow(() -> new CatalogNotFoundException("Storage not found"));
-        storage.setPathCatalogs(storage.getPathCatalogs().stream().filter((pathCatalog) -> pathCatalog.getPathName().equals("/")).collect(Collectors.toList()));
-        return storage;
-    }
-
-
 }

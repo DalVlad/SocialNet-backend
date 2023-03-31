@@ -33,7 +33,7 @@ public class CatalogController {
     @ApiOperation("Get all catalog and file")
     public StorageDTO getAllCatalogAndFile(){
         Person person = getPersonDetails().getPerson();
-        return convertToStorageDTO(storageService.getByPersonOnlyWithRootCatalog(person));
+        return convertToStorageDTO(storageService.getByPerson(person));
     }
     private PersonDetails getPersonDetails(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

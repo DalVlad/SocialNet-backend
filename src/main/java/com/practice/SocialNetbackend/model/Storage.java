@@ -18,8 +18,9 @@ public class Storage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToMany(mappedBy = "storage", cascade = CascadeType.ALL)
-    private List<PathCatalog> pathCatalogs;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "path_catalog_root", referencedColumnName = "id")
+    private PathCatalog pathCatalogRoot;
 
     @ManyToOne
     @JoinColumn(name = "person_id", referencedColumnName = "id")

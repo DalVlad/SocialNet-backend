@@ -32,8 +32,7 @@ public class PathCatalog {
     @Column(name = "path")
     private String pathName;
 
-    @ManyToOne
-    @JoinColumn(name = "storage_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "pathCatalogRoot")
     private Storage storage;
 
     @OneToMany(mappedBy = "pathCatalog")

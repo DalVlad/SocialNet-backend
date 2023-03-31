@@ -1,6 +1,7 @@
 package com.practice.SocialNetbackend.service;
 
 import com.practice.SocialNetbackend.model.File;
+import com.practice.SocialNetbackend.model.PathCatalog;
 import com.practice.SocialNetbackend.model.Storage;
 import com.practice.SocialNetbackend.model.Person;
 import com.practice.SocialNetbackend.repositorie.StorageRepository;
@@ -36,9 +37,16 @@ public class FileService {
         saveFile.setExtension(file.getContentType());
         saveFile.setName(file.getOriginalFilename());
         Storage storage = storageRepository.findByPerson(person)
-                .orElseThrow(() -> new CatalogNotFoundException(String.format("Catalog with path %s not found", pathCatalog)));
-        saveFile.setPathCatalog(pathCatalogRepository.findByPathNameAndStorage(pathCatalog, storage)
-                .orElseThrow(() -> new CatalogNotFoundException(String.format("Catalog with path %s not found", pathCatalog))));
+                .orElseThrow(() -> new CatalogNotFoundException("Storage not found"));
+        PathCatalog pathCatalogSave = new PathCatalog();
+        if(pathCatalog.equals("/")){
+            pathCatalogSave = storage.getPathCatalogRoot();
+        }else {
+            pathCatalogSave = storage.getPathCatalogRoot().getPathCatalogs()
+                    .stream().filter((pathCatalog1 -> pathCatalog.equals(pathCatalog1.getPathName())))
+                    .findAny().orElseThrow(() -> new CatalogNotFoundException(String.format("Catalog with path '%s' not found", pathCatalog)));
+        }
+        saveFile.setPathCatalog(pathCatalogSave);
         try(InputStream is = file.getInputStream()){
             saveFile.setFile(is.readAllBytes());
         }catch (IOException e){
@@ -47,8 +55,9 @@ public class FileService {
         fileRepository.save(saveFile);
     }
 
-    public File getFile(String name, Storage storage, String pathCatalog) throws FileNotFoundException {
-        return fileRepository.findByNameAndPathCatalog(name, storage.getPathCatalogs()
+    public File getFile(String name, Storage storage, String pathCatalog) throws FileNotFoundException, CatalogNotFoundException {
+        PathCatalog pathCatalogRoot = storage.getPathCatalogRoot();
+        return fileRepository.findByNameAndPathCatalog(name, pathCatalogRoot.getPathCatalogs()
                 .stream().filter((pathCatalog1 -> pathCatalog.equals(pathCatalog1.getPathName()))).findAny()
                 .orElseThrow(() -> new CatalogNotFoundException("Catalog with name '" + pathCatalog + "' not found")))
                 .orElseThrow(() -> new FileNotFoundException("File with name '" + name + "' in catalog '"+ pathCatalog +"' not found"));

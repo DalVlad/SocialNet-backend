@@ -31,7 +31,7 @@ public class RegistrationService {
     public void registration(Person person){
         person.setPassword(passwordEncoder.encode(person.getPassword()));
         Storage storage = new Storage();
-        storage.setPathCatalogs(Collections.singletonList(new PathCatalog("/", storage)));
+        storage.setPathCatalogRoot(new PathCatalog("/", storage));
         storage.setPerson(person);
         personRepository.save(person);
         catalogService.save(storage);

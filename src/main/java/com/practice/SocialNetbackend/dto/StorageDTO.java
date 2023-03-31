@@ -9,7 +9,7 @@ import java.util.List;
 @Setter
 public class StorageDTO {
 
-    private List<PathCatalogDTO> pathCatalogs;
+    private PathCatalogDTO pathCatalogRoot;
 
 
 }
