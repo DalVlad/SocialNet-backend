@@ -21,9 +21,6 @@ public class Storage {
     @OneToMany(mappedBy = "storage", cascade = CascadeType.ALL)
     private List<PathCatalog> pathCatalogs;
 
-//    @OneToMany(mappedBy = "storage")
-//    private List<File> files;
-
     @ManyToOne
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person person;

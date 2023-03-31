@@ -12,9 +12,6 @@ import java.util.Optional;
 @Repository
 public interface StorageRepository extends JpaRepository<Storage, Long> {
 
-    @Query(value = "FROM Storage s JOIN s.pathCatalogs pc WHERE pc.path = :path AND s.person = :person")
-    Optional<Storage> findByPathAndPerson(@Param("path") String path, @Param("person") Person person);
-
     Optional<Storage> findByPerson(Person person);
 
 }

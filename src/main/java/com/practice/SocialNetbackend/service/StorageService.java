@@ -1,12 +1,13 @@
 package com.practice.SocialNetbackend.service;
 
 import com.practice.SocialNetbackend.model.Storage;
-import com.practice.SocialNetbackend.model.PathCatalog;
 import com.practice.SocialNetbackend.model.Person;
 import com.practice.SocialNetbackend.repositorie.StorageRepository;
 import com.practice.SocialNetbackend.util.CatalogNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.stream.Collectors;
 
 
 @Service
@@ -19,13 +20,15 @@ public class StorageService {
         this.storageRepository = storageRepository;
     }
 
-    public Storage getByPathAndPerson(String path, Person person){
-        return storageRepository.findByPathAndPerson(path, person)
-                        .orElseThrow(() -> new CatalogNotFoundException("Catalog with path '" + path + "' not found"));
+    public Storage getByPerson(Person person){
+        return storageRepository.findByPerson(person)
+                        .orElseThrow(() -> new CatalogNotFoundException("Storage not found"));
     }
 
-    public Storage getByPerson(Person person){
-        return storageRepository.findByPerson(person).orElseThrow(() -> new CatalogNotFoundException("Storage not found"));
+    public Storage getByPersonOnlyWithRootCatalog(Person person){
+        Storage storage = storageRepository.findByPerson(person).orElseThrow(() -> new CatalogNotFoundException("Storage not found"));
+        storage.setPathCatalogs(storage.getPathCatalogs().stream().filter((pathCatalog) -> pathCatalog.getPathName().equals("/")).collect(Collectors.toList()));
+        return storage;
     }
 
 

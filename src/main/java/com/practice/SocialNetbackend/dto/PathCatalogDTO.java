@@ -9,7 +9,7 @@ import java.util.List;
 @Setter
 public class PathCatalogDTO {
 
-    private String path;
+    private String pathName;
 
     private List<FileDTO> files;
 

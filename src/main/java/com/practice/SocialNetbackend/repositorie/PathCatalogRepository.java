@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface PathCatalogRepository extends JpaRepository<PathCatalog, Long> {
 
-    Optional<PathCatalog> findByPathAndStorage(String path, Storage storage);
+    Optional<PathCatalog> findByPathNameAndStorage(String path, Storage storage);
 
 }

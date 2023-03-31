@@ -15,8 +15,8 @@ import java.util.Objects;
 @Table(name = "path_catalog")
 public class PathCatalog {
 
-    public PathCatalog(String path, Storage storage) {
-        this.path = path;
+    public PathCatalog(String pathName, Storage storage) {
+        this.pathName = pathName;
         this.storage = storage;
     }
 
@@ -30,7 +30,7 @@ public class PathCatalog {
     @NotNull
     @NotBlank
     @Column(name = "path")
-    private String path;
+    private String pathName;
 
     @ManyToOne
     @JoinColumn(name = "storage_id", referencedColumnName = "id")

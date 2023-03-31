@@ -49,7 +49,7 @@ public class FileController {
         int lastSlashIndex = pathCatalog.lastIndexOf("/");
         String catalogName = pathCatalog.substring(0, lastSlashIndex == 0 ? 1 : lastSlashIndex);
         String fileName = pathCatalog.substring(lastSlashIndex + 1);
-        Storage storage = storageService.getByPathAndPerson(catalogName, person);
+        Storage storage = storageService.getByPerson(person);
         File file = fileService.getFile(fileName, storage, catalogName);
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(file.getExtension()))

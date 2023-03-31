@@ -31,9 +31,9 @@ public class CatalogController {
 
     @GetMapping
     @ApiOperation("Get all catalog and file")
-    public StorageDTO getAllCatalogAndFile(@RequestParam("pathCatalog") String pathCatalog){
+    public StorageDTO getAllCatalogAndFile(){
         Person person = getPersonDetails().getPerson();
-        return convertToStorageDTO(storageService.getByPerson(person));
+        return convertToStorageDTO(storageService.getByPersonOnlyWithRootCatalog(person));
     }
     private PersonDetails getPersonDetails(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
