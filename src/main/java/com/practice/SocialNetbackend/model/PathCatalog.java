@@ -20,6 +20,12 @@ public class PathCatalog {
         this.storage = storage;
     }
 
+    public PathCatalog(String pathName, Storage storage, PathCatalog parent) {
+        this.pathName = pathName;
+        this.storage = storage;
+        this.parent = parent;
+    }
+
     public PathCatalog(){}
 
     @Id
