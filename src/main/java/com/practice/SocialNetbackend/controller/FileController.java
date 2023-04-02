@@ -34,7 +34,7 @@ public class FileController {
         this.storageService = storageService;
     }
 
-    @PostMapping("/catalog")
+    @PostMapping
     @ApiOperation("Save file")
     public ResponseEntity<HttpStatus> saveFile(@RequestParam("file") MultipartFile multipartFile,
                                                    @RequestParam("pathCatalog") String pathCatalog){
@@ -42,7 +42,7 @@ public class FileController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @GetMapping("/catalog")
+    @GetMapping
     @ApiOperation("Get file")
     public ResponseEntity<byte[]> getFile(@RequestParam("pathCatalog") String pathCatalog){
         Person person = getPersonDetails().getPerson();
