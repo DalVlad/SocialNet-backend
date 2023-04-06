@@ -11,9 +11,7 @@ import com.practice.SocialNetbackend.util.FileNotFoundException;
 import com.practice.SocialNetbackend.util.NotCreationException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -51,9 +49,11 @@ public class FileController {
         String fileName = pathCatalog.substring(lastSlashIndex + 1);
         Storage storage = storageService.getByPerson(person);
         File file = fileService.getFile(fileName, storage, catalogName);
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(file.getExtension()))
-                .body(file.getFile());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(file.getExtension()));
+        headers.setContentDisposition(ContentDisposition.builder("attachment")
+                .build());
+        return new ResponseEntity<>(file.getFile(), headers, HttpStatus.OK);
     }
 
     private PersonDetails getPersonDetails(){
