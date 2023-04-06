@@ -33,7 +33,7 @@ public class CatalogController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     @ApiOperation("Get all catalog and file")
     public StorageDTO getAllCatalogAndFile(){
         Person person = getPersonDetails().getPerson();
