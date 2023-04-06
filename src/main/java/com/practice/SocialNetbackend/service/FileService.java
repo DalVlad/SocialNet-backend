@@ -57,7 +57,8 @@ public class FileService {
 
     public File getFile(String name, Storage storage, String pathCatalog) throws FileNotFoundException, CatalogNotFoundException {
         PathCatalog pathCatalogRoot = storage.getPathCatalogRoot();
-        return fileRepository.findByNameAndPathCatalog(name, pathCatalogRoot.getPathCatalogs()
+        return fileRepository.findByNameAndPathCatalog(name,
+                        pathCatalog.equals("/") ? pathCatalogRoot : pathCatalogRoot.getPathCatalogs()
                 .stream().filter((pathCatalog1 -> pathCatalog.equals(pathCatalog1.getPathName()))).findAny()
                 .orElseThrow(() -> new CatalogNotFoundException("Catalog with name '" + pathCatalog + "' not found")))
                 .orElseThrow(() -> new FileNotFoundException("File with name '" + name + "' in catalog '"+ pathCatalog +"' not found"));
