@@ -1,6 +1,8 @@
 package com.practice.SocialNetbackend.controller;
 
+import com.practice.SocialNetbackend.dto.PathCatalogDTO;
 import com.practice.SocialNetbackend.dto.StorageDTO;
+import com.practice.SocialNetbackend.model.PathCatalog;
 import com.practice.SocialNetbackend.model.Person;
 import com.practice.SocialNetbackend.model.Storage;
 import com.practice.SocialNetbackend.security.PersonDetails;
@@ -40,6 +42,13 @@ public class CatalogController {
         return convertToStorageDTO(storageService.getByPerson(person));
     }
 
+    @GetMapping
+    @ApiOperation("Get all catalog and file")
+    public PathCatalogDTO getCatalogAndFile(@RequestParam("pathCatalog") String pathCatalog){
+        Person person = getPersonDetails().getPerson();
+        return convertToPathCatalogDTO(storageService.getByPersonAndPath(person, pathCatalog));
+    }
+
     @PostMapping
     @ApiOperation("Create catalog")
     public ResponseEntity<HttpStatus> createCatalog(@RequestParam("pathCatalog") String pathCatalog){
@@ -55,6 +64,9 @@ public class CatalogController {
 
     private StorageDTO convertToStorageDTO(Storage storage){
         return modelMapper.map(storage, StorageDTO.class);
+    }
+    private PathCatalogDTO convertToPathCatalogDTO(PathCatalog pathCatalog){
+        return modelMapper.map(pathCatalog, PathCatalogDTO.class);
     }
 
     @ExceptionHandler
