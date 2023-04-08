@@ -1,4 +1,4 @@
-package com.prictice.socialnet.entity;
+package com.prictice.socialnet.domain;
 
 import org.springframework.security.core.GrantedAuthority;
 
