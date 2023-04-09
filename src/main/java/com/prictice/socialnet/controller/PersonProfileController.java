@@ -18,12 +18,12 @@ public class PersonProfileController {
         return profileService.findById(id);
     }
 
-    @PostMapping  /* Replace Long id -> @AuthenticationPrincipal Person person */
+    @PostMapping  /* TODO: Replace Long id -> @AuthenticationPrincipal Person person */
     public PersonProfile createProfile(@RequestBody PersonProfile personProfile, Long id){
         return profileService.createProfile(personProfile, id);
     }
 
-    @PostMapping("{id}")
+    @PutMapping("{id}")
     public PersonProfile updateProfile(
             @PathVariable("id") PersonProfile personProfileFromDb,
             @RequestBody PersonProfile personProfile
