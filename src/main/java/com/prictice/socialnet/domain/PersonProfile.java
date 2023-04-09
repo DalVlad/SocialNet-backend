@@ -1,7 +1,6 @@
 package com.prictice.socialnet.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
