@@ -14,7 +14,20 @@ public class PersonProfileController {
     }
 
     @GetMapping("{id}")
-    public PersonProfile getProfile(@PathVariable("id")PersonProfile personProfile){
-        return personProfile;
+    public PersonProfile getProfile(@PathVariable("id") Long id){
+        return profileService.findById(id);
+    }
+
+    @PostMapping  /* Replace Long id -> @AuthenticationPrincipal Person person */
+    public PersonProfile createProfile(@RequestBody PersonProfile personProfile, Long id){
+        return profileService.createProfile(personProfile, id);
+    }
+
+    @PostMapping("{id}")
+    public PersonProfile updateProfile(
+            @PathVariable("id") PersonProfile personProfileFromDb,
+            @RequestBody PersonProfile personProfile
+    ){
+        return profileService.updateProfile(personProfileFromDb, personProfile);
     }
 }

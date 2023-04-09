@@ -17,4 +17,22 @@ public class PersonProfileService {
         return personProfileRepo.findById(id)
                 .orElseThrow(() -> new PersonNotFoundException("Person profile with id: " + id + " not found!"));
     }
+
+    public PersonProfile createProfile(PersonProfile personProfile, Long id){
+        personProfile.setPerson(id);
+
+        return personProfileRepo.save(personProfile);
+    }
+
+    public PersonProfile updateProfile(
+            PersonProfile personProfileFromDb,
+            PersonProfile personProfile
+    ){
+        personProfileFromDb.setFirstName(personProfile.getFirstName());
+        personProfileFromDb.setLastName(personProfile.getLastName());
+        personProfileFromDb.setEmail(personProfile.getEmail());
+        personProfileFromDb.setBirthdate(personProfile.getBirthdate());
+
+        return personProfileRepo.save(personProfileFromDb);
+    }
 }
