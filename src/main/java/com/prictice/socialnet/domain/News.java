@@ -27,7 +27,6 @@ public class News {
     private PersonProfile personProfile;
 
     @OneToMany(mappedBy = "news",
-            cascade = CascadeType.ALL,
             orphanRemoval = true
     )
     private Set<Comment> comments;

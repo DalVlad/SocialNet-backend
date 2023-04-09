@@ -27,12 +27,10 @@ public class PersonProfile {
     private Long person;
 
     @OneToMany(mappedBy = "personProfile",
-            cascade = CascadeType.ALL,
             orphanRemoval = true)
     private Set<News> personNews;
 
     @OneToMany(mappedBy = "personProfile",
-            cascade = CascadeType.ALL,
             orphanRemoval = true)
     private Set<Comment> personComment;
 }

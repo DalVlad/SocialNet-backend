@@ -3,6 +3,7 @@ package com.prictice.socialnet.service;
 import com.prictice.socialnet.domain.News;
 import com.prictice.socialnet.domain.PersonProfile;
 import com.prictice.socialnet.repository.NewsRepo;
+import com.prictice.socialnet.utility.exception.NewsNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,11 @@ public class NewsService {
     public NewsService(NewsRepo newsRepo, PersonProfileService profileService) {
         this.newsRepo = newsRepo;
         this.profileService = profileService;
+    }
+
+    public News findOne(Long id){
+        return newsRepo.findById(id)
+                .orElseThrow(() -> new NewsNotFoundException("News with id: " + id + " not found!"));
     }
 
     public List<News> findAllByPersonProfileId(Long id){
