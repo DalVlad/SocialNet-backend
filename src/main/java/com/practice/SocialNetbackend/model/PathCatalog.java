@@ -38,13 +38,13 @@ public class PathCatalog {
     @Column(name = "path")
     private String pathName;
 
-    @OneToOne(mappedBy = "pathCatalogRoot")
+    @OneToOne(mappedBy = "pathCatalogRoot", fetch = FetchType.LAZY)
     private Storage storage;
 
-    @OneToMany(mappedBy = "pathCatalog")
+    @OneToMany(mappedBy = "pathCatalog", fetch = FetchType.LAZY)
     private List<File> files;
 
-    @OneToMany(mappedBy = "parent", orphanRemoval = true)
+    @OneToMany(mappedBy = "parent", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<PathCatalog> pathCatalogs;
 
     @ManyToOne(fetch = FetchType.LAZY)

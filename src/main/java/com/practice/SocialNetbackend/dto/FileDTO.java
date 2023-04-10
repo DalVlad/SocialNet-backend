@@ -9,4 +9,8 @@ public class FileDTO {
 
     private String name;
 
+    private String extension;
+
+    private byte[] preview;
+
 }

@@ -10,10 +10,12 @@ import com.practice.SocialNetbackend.repositorie.PathCatalogRepository;
 import com.practice.SocialNetbackend.util.CatalogNotFoundException;
 import com.practice.SocialNetbackend.util.FileNotFoundException;
 import com.practice.SocialNetbackend.util.NotCreationException;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -32,7 +34,8 @@ public class FileService {
     }
 
     @Transactional
-    public void save(MultipartFile file, Person person, String pathCatalog) throws CatalogNotFoundException, NotCreationException {
+    public void save(MultipartFile file, Person person, String pathCatalog) throws CatalogNotFoundException,
+            NotCreationException {
         File saveFile = new File();
         saveFile.setExtension(file.getContentType());
         saveFile.setName(file.getOriginalFilename());
@@ -50,8 +53,14 @@ public class FileService {
         try(InputStream is = file.getInputStream()){
             saveFile.setFile(is.readAllBytes());
         }catch (IOException e){
-            throw new NotCreationException("File not readable");
+            throw new NotCreationException(e.getMessage());
         }
+        try(InputStream is = file.getInputStream()){
+            ByteArrayOutputStream baos = new ByteArrayOutputStream ();
+            Thumbnails.of(is).size(64, 64).outputFormat("jpeg").toOutputStream(baos);
+            saveFile.setPreview(baos.toByteArray());
+            baos.close();
+        }catch (IOException ignore){}
         fileRepository.save(saveFile);
     }
 

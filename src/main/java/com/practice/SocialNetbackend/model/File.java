@@ -33,6 +33,11 @@ public class File {
     @Column(name = "file_byte")
     private byte[] file;
 
+    @Lob
+    @Type(type = "org.hibernate.type.ImageType")
+    @Column(name = "preview")
+    private byte[] preview;
+
     @ManyToOne
     @JoinColumn(name = "path_catalog_id", referencedColumnName = "id")
     private PathCatalog pathCatalog;
