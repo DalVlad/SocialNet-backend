@@ -35,13 +35,6 @@ public class CatalogController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping("/all")
-    @ApiOperation("Get all catalog and file")
-    public StorageDTO getAllCatalogAndFile(){
-        Person person = getPersonDetails().getPerson();
-        return convertToStorageDTO(storageService.getByPerson(person));
-    }
-
     @GetMapping
     @ApiOperation("Get all catalog and file")
     public PathCatalogDTO getCatalogAndFile(@RequestParam("pathCatalog") String pathCatalog){

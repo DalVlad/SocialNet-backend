@@ -30,6 +30,9 @@ public class StorageService {
     public PathCatalog getByPersonAndPath(Person person, String pathCatalog) throws CatalogNotFoundException{
         Storage storage = storageRepository.findByPerson(person)
                 .orElseThrow(() -> new CatalogNotFoundException("Storage not found"));
+        if(pathCatalog.equals("/")){
+            return storage.getPathCatalogRoot();
+        }
         return storage.getPathCatalogRoot().getPathCatalogs().stream()
                 .filter(pathCatalogDTO -> pathCatalogDTO.getPathName().equals(pathCatalog)).findFirst()
                 .orElseThrow(() -> new CatalogNotFoundException("Catalog with name '" + pathCatalog + "' not found"));
