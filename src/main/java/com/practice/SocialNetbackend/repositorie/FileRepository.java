@@ -12,4 +12,6 @@ public interface FileRepository extends JpaRepository<File, Long> {
 
     Optional<File> findByNameAndPathCatalog(String name, PathCatalog pathCatalog);
 
+    long deleteByNameAndPathCatalog(String name, PathCatalog pathCatalog);
+
 }

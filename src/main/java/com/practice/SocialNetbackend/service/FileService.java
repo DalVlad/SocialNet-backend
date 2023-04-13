@@ -76,6 +76,16 @@ public class FileService {
                 .orElseThrow(() -> new FileNotFoundException("File with name '" + catalogNameFileName[1] + "' in catalog '"+ catalogNameFileName[0] +"' not found"));
     }
 
+    @Transactional
+    public long deleteFile(Storage storage, String pathCatalog) throws FileNotFoundException, CatalogNotFoundException {
+        String[] catalogNameFileName = separationPathAndFileName(pathCatalog);
+        PathCatalog pathCatalogRoot = storage.getPathCatalogRoot();
+        return fileRepository.deleteByNameAndPathCatalog(catalogNameFileName[1],
+                catalogNameFileName[0].equals("/") ? pathCatalogRoot : pathCatalogRoot.getPathCatalogs()
+                        .stream().filter((pathCatalog1 -> catalogNameFileName[0].equals(pathCatalog1.getPathName()))).findAny()
+                        .orElseThrow(() -> new CatalogNotFoundException("Catalog with name '" + catalogNameFileName[0] + "' not found")));
+    }
+
     private String[] separationPathAndFileName(String path){
         int lastSlashIndex = path.lastIndexOf("/");
         String[] catalogNameFileName = new String[2];

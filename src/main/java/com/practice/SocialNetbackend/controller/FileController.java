@@ -53,6 +53,15 @@ public class FileController {
         return new ResponseEntity<>(file.getFile(), headers, HttpStatus.OK);
     }
 
+    @DeleteMapping
+    @ApiOperation("Delete file")
+    public ResponseEntity<HttpStatus> deleteFile(@RequestParam("pathCatalog") String pathCatalogAndFileNameSeparatedSlash){
+        Person person = getPersonDetails().getPerson();
+        Storage storage = storageService.getByPerson(person);
+        fileService.deleteFile(storage, pathCatalogAndFileNameSeparatedSlash);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
     private PersonDetails getPersonDetails(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return (PersonDetails) authentication.getPrincipal();
