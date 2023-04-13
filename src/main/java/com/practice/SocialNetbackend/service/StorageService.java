@@ -42,7 +42,7 @@ public class StorageService {
     public void savePathCatalog(String path, Storage storage) throws NotCreationException{
         boolean emptyPath = storage.getPathCatalogRoot().getPathCatalogs().stream()
                 .noneMatch(pathCatalog -> pathCatalog.getPathName().equals(path));
-        if(!emptyPath){
+        if(!emptyPath || path.equals("/")){
             throw new NotCreationException("Catalog with '" + path + "' is exists");
         }
         PathCatalog pathCatalog = new PathCatalog(path, storage, storage.getPathCatalogRoot());
