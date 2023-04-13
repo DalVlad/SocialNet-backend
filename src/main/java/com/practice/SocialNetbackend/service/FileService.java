@@ -64,13 +64,22 @@ public class FileService {
         fileRepository.save(saveFile);
     }
 
-    public File getFile(String name, Storage storage, String pathCatalog) throws FileNotFoundException, CatalogNotFoundException {
+    public File getFile(Storage storage, String pathCatalog) throws FileNotFoundException, CatalogNotFoundException {
+        String[] catalogNameFileName = separationPathAndFileName(pathCatalog);
         PathCatalog pathCatalogRoot = storage.getPathCatalogRoot();
-        return fileRepository.findByNameAndPathCatalog(name,
-                        pathCatalog.equals("/") ? pathCatalogRoot : pathCatalogRoot.getPathCatalogs()
-                .stream().filter((pathCatalog1 -> pathCatalog.equals(pathCatalog1.getPathName()))).findAny()
-                .orElseThrow(() -> new CatalogNotFoundException("Catalog with name '" + pathCatalog + "' not found")))
-                .orElseThrow(() -> new FileNotFoundException("File with name '" + name + "' in catalog '"+ pathCatalog +"' not found"));
+        return fileRepository.findByNameAndPathCatalog(catalogNameFileName[1],
+                        catalogNameFileName[0].equals("/") ? pathCatalogRoot : pathCatalogRoot.getPathCatalogs()
+                .stream().filter((pathCatalog1 -> catalogNameFileName[0].equals(pathCatalog1.getPathName()))).findAny()
+                .orElseThrow(() -> new CatalogNotFoundException("Catalog with name '" + catalogNameFileName[0] + "' not found")))
+                .orElseThrow(() -> new FileNotFoundException("File with name '" + catalogNameFileName[1] + "' in catalog '"+ catalogNameFileName[0] +"' not found"));
+    }
+
+    private String[] separationPathAndFileName(String path){
+        int lastSlashIndex = path.lastIndexOf("/");
+        String[] catalogNameFileName = new String[2];
+        catalogNameFileName[0] = path.substring(0, lastSlashIndex == 0 ? 1 : lastSlashIndex);
+        catalogNameFileName[1] = path.substring(lastSlashIndex + 1);
+        return catalogNameFileName;
     }
 
 }

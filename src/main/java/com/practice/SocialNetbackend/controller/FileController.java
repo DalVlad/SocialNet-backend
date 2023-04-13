@@ -42,13 +42,10 @@ public class FileController {
 
     @GetMapping
     @ApiOperation("Get file")
-    public ResponseEntity<byte[]> getFile(@RequestParam("pathCatalog") String pathCatalog){
+    public ResponseEntity<byte[]> getFile(@RequestParam("pathCatalog") String pathCatalogAndFileNameSeparatedSlash){
         Person person = getPersonDetails().getPerson();
-        int lastSlashIndex = pathCatalog.lastIndexOf("/");
-        String catalogName = pathCatalog.substring(0, lastSlashIndex == 0 ? 1 : lastSlashIndex);
-        String fileName = pathCatalog.substring(lastSlashIndex + 1);
         Storage storage = storageService.getByPerson(person);
-        File file = fileService.getFile(fileName, storage, catalogName);
+        File file = fileService.getFile(storage, pathCatalogAndFileNameSeparatedSlash);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType(file.getExtension()));
         headers.setContentDisposition(ContentDisposition.builder("attachment")
