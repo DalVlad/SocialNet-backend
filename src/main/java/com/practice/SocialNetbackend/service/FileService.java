@@ -57,7 +57,7 @@ public class FileService {
         }
         try(InputStream is = file.getInputStream()){
             ByteArrayOutputStream baos = new ByteArrayOutputStream ();
-            Thumbnails.of(is).size(64, 64).outputFormat("jpeg").toOutputStream(baos);
+            Thumbnails.of(is).size(160, 74).outputFormat("jpeg").toOutputStream(baos);
             saveFile.setPreview(baos.toByteArray());
             baos.close();
         }catch (IOException ignore){}
