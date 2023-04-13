@@ -61,6 +61,8 @@ public class FileService {
             saveFile.setPreview(baos.toByteArray());
             baos.close();
         }catch (IOException ignore){}
+        saveFile = fileRepository.save(saveFile);
+        saveFile.setName(saveFile.getName() + saveFile.getId());
         fileRepository.save(saveFile);
     }
 
