@@ -32,11 +32,20 @@ public class FileController {
         this.storageService = storageService;
     }
 
-    @PostMapping
-    @ApiOperation("Save file")
-    public ResponseEntity<HttpStatus> saveFile(@RequestParam("file") MultipartFile multipartFile,
+    @PostMapping("/img")
+    @ApiOperation("Save img")
+    public ResponseEntity<HttpStatus> saveImg(@RequestParam("file") MultipartFile multipartFile,
                                                    @RequestParam("pathCatalog") String pathCatalog){
-        fileService.save(multipartFile, getPersonDetails().getPerson(), pathCatalog);
+        fileService.save(multipartFile, getPersonDetails().getPerson(), pathCatalog, multipartFile);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @PostMapping("/video")
+    @ApiOperation("Save video")
+    public ResponseEntity<HttpStatus> saveVideo(@RequestParam("file") MultipartFile multipartFile,
+                                                  @RequestParam("preview") MultipartFile multipartFilePreview,
+                                               @RequestParam("pathCatalog") String pathCatalog){
+        fileService.save(multipartFile, getPersonDetails().getPerson(), pathCatalog, multipartFilePreview);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

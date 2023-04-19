@@ -34,7 +34,7 @@ public class FileService {
     }
 
     @Transactional
-    public void save(MultipartFile file, Person person, String pathCatalog) throws CatalogNotFoundException,
+    public void save(MultipartFile file, Person person, String pathCatalog, MultipartFile preview) throws CatalogNotFoundException,
             NotCreationException {
         File saveFile = new File();
         saveFile.setExtension(file.getContentType());
@@ -55,7 +55,7 @@ public class FileService {
         }catch (IOException e){
             throw new NotCreationException(e.getMessage());
         }
-        try(InputStream is = file.getInputStream()){
+        try(InputStream is = preview.getInputStream()){
             ByteArrayOutputStream baos = new ByteArrayOutputStream ();
             Thumbnails.of(is).size(160, 74).outputFormat("jpeg").toOutputStream(baos);
             saveFile.setPreview(baos.toByteArray());
