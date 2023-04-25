@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -41,6 +42,12 @@ public class File {
     @ManyToOne
     @JoinColumn(name = "path_catalog_id", referencedColumnName = "id")
     private PathCatalog pathCatalog;
+
+    @ManyToMany
+    @JoinTable(name = "like_file",
+    joinColumns = {@JoinColumn(name = "file_id")},
+    inverseJoinColumns = {@JoinColumn(name = "person_id")})
+    private Set<Person> likes;
 
     @Override
     public boolean equals(Object o) {

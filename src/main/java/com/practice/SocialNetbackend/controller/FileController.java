@@ -1,5 +1,6 @@
 package com.practice.SocialNetbackend.controller;
 
+import com.practice.SocialNetbackend.dto.FileLikeDTO;
 import com.practice.SocialNetbackend.model.Storage;
 import com.practice.SocialNetbackend.model.File;
 import com.practice.SocialNetbackend.model.Person;
@@ -63,6 +64,24 @@ public class FileController {
                 .build());
         headers.setCacheControl(CacheControl.maxAge(30, TimeUnit.MINUTES));
         return new ResponseEntity<>(file.getFile(), headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/like")
+    @ApiOperation("Get file-like")
+    public FileLikeDTO getFileLike(@RequestParam("pathCatalog") String pathCatalogAndFileNameSeparatedSlash){
+        Person person = getPersonDetails().getPerson();
+        Storage storage = storageService.getByPerson(person);
+        return fileService.getFileLike(person, fileService.getFile(storage, pathCatalogAndFileNameSeparatedSlash));
+    }
+
+    @PostMapping("/like")
+    @ApiOperation("Set file-like")
+    public void setFileLike(@RequestParam("pathCatalog") String pathCatalogAndFileNameSeparatedSlash){
+        Person person = getPersonDetails().getPerson();
+        Storage storage = storageService.getByPerson(person);
+        File file = fileService.getFile(storage, pathCatalogAndFileNameSeparatedSlash);
+
+        fileService.setFileLike(person, fileService.getFile(storage, pathCatalogAndFileNameSeparatedSlash));
     }
 
     @DeleteMapping

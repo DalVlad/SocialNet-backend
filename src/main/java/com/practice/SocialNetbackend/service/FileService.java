@@ -1,12 +1,12 @@
 package com.practice.SocialNetbackend.service;
 
+import com.practice.SocialNetbackend.dto.FileLikeDTO;
 import com.practice.SocialNetbackend.model.File;
 import com.practice.SocialNetbackend.model.PathCatalog;
 import com.practice.SocialNetbackend.model.Storage;
 import com.practice.SocialNetbackend.model.Person;
 import com.practice.SocialNetbackend.repositorie.StorageRepository;
 import com.practice.SocialNetbackend.repositorie.FileRepository;
-import com.practice.SocialNetbackend.repositorie.PathCatalogRepository;
 import com.practice.SocialNetbackend.util.CatalogNotFoundException;
 import com.practice.SocialNetbackend.util.FileNotFoundException;
 import com.practice.SocialNetbackend.util.NotCreationException;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityManager;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,12 +26,10 @@ public class FileService {
 
     private final FileRepository fileRepository;
     private final StorageRepository storageRepository;
-    private final PathCatalogRepository pathCatalogRepository;
 
-    public FileService(FileRepository fileRepository, StorageRepository storageRepository, PathCatalogRepository pathCatalogRepository) {
+    public FileService(FileRepository fileRepository, StorageRepository storageRepository) {
         this.fileRepository = fileRepository;
         this.storageRepository = storageRepository;
-        this.pathCatalogRepository = pathCatalogRepository;
     }
 
     @Transactional
@@ -66,14 +65,28 @@ public class FileService {
         fileRepository.save(saveFile);
     }
 
-    public File getFile(Storage storage, String pathCatalog) throws FileNotFoundException, CatalogNotFoundException {
-        String[] catalogNameFileName = separationPathAndFileName(pathCatalog);
+    public File getFile(Storage storage, String pathCatalogAndNameFile) throws FileNotFoundException, CatalogNotFoundException {
+        String[] catalogNameFileName = separationPathAndFileName(pathCatalogAndNameFile);
         PathCatalog pathCatalogRoot = storage.getPathCatalogRoot();
         return fileRepository.findByNameAndPathCatalog(catalogNameFileName[1],
                         catalogNameFileName[0].equals("/") ? pathCatalogRoot : pathCatalogRoot.getPathCatalogs()
                 .stream().filter((pathCatalog1 -> catalogNameFileName[0].equals(pathCatalog1.getPathName()))).findAny()
                 .orElseThrow(() -> new CatalogNotFoundException("Catalog with name '" + catalogNameFileName[0] + "' not found")))
                 .orElseThrow(() -> new FileNotFoundException("File with name '" + catalogNameFileName[1] + "' in catalog '"+ catalogNameFileName[0] +"' not found"));
+    }
+
+    public FileLikeDTO getFileLike(Person person, File file) throws FileNotFoundException, CatalogNotFoundException {
+        return fileRepository.getFileLikes(person, file).orElseThrow(() -> new FileNotFoundException("Like for file with name '" + file.getName() + "' not found"));
+    }
+
+    @Transactional
+    public void setFileLike(Person person, File file) throws FileNotFoundException, CatalogNotFoundException {
+        if(file.getLikes().contains(person)){
+            file.getLikes().remove(person);
+        }else {
+            file.getLikes().add(person);
+        }
+        fileRepository.save(file);
     }
 
     @Transactional

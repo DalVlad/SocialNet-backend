@@ -25,5 +25,11 @@
     <changeSet id="31" author="DalVlad">
         <tagDatabase tag="v-2.0"/>
     </changeSet>
+
+    <include file="v-3.0/db.v-3.0.xml" relativeToChangelogFile="true" />
+
+    <changeSet id="like-file-table" author="DalVlad">
+        <tagDatabase tag="v-3.0"/>
+    </changeSet>
     
 </databaseChangeLog>
