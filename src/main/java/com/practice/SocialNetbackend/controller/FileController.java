@@ -17,6 +17,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.concurrent.TimeUnit;
+
 
 @RestController
 @RequestMapping("/file")
@@ -59,6 +61,7 @@ public class FileController {
         headers.setContentType(MediaType.parseMediaType(file.getExtension()));
         headers.setContentDisposition(ContentDisposition.builder("attachment")
                 .build());
+        headers.setCacheControl(CacheControl.maxAge(30, TimeUnit.MINUTES));
         return new ResponseEntity<>(file.getFile(), headers, HttpStatus.OK);
     }
 
