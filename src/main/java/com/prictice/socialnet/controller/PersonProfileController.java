@@ -2,6 +2,8 @@ package com.prictice.socialnet.controller;
 
 import com.prictice.socialnet.domain.PersonProfile;
 import com.prictice.socialnet.service.PersonProfileService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,20 +16,20 @@ public class PersonProfileController {
     }
 
     @GetMapping("{id}")
-    public PersonProfile getProfile(@PathVariable("id") Long id){
-        return profileService.findById(id);
+    public ResponseEntity<PersonProfile> getProfile(@PathVariable("id") Long id){
+        PersonProfile personProfile = profileService.findById(id);
+        return ResponseEntity.ok(personProfile);
     }
 
-    @PostMapping  /* TODO: Replace Long id -> @AuthenticationPrincipal Person person */
-    public PersonProfile createProfile(@RequestBody PersonProfile personProfile, Long id){
-        return profileService.createProfile(personProfile, id);
+    @PostMapping ("{id}") /* TODO: Replace Long id -> @AuthenticationPrincipal Person person */
+    public ResponseEntity<?> createProfile(@RequestBody PersonProfile personProfile, @PathVariable("id") Long id){
+        profileService.createProfile(personProfile, id);
+        return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
-    public PersonProfile updateProfile(
-            @PathVariable("id") PersonProfile personProfileFromDb,
-            @RequestBody PersonProfile personProfile
-    ){
-        return profileService.updateProfile(personProfileFromDb, personProfile);
+    public ResponseEntity<?> updateProfile(@PathVariable("id") PersonProfile fromDb, @RequestBody PersonProfile personProfile){
+        profileService.updateProfile(fromDb, personProfile);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }

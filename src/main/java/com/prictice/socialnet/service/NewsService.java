@@ -18,6 +18,7 @@ public class NewsService {
         this.profileService = profileService;
     }
 
+    // maybe make void?
     public News findOne(Long id){
         return newsRepo.findById(id)
                 .orElseThrow(() -> new NewsNotFoundException("News with id: " + id + " not found!"));
@@ -28,15 +29,14 @@ public class NewsService {
     }
 
     public News createNews(News news, Long id){
-        PersonProfile personProfile = profileService.findById(id);
-        news.setPersonProfile(personProfile);
+        news.setPersonProfile(profileService.findById(id));
 
         return newsRepo.save(news);
     }
 
     public News updateNews(News newsFromDb, News news){
         newsFromDb.setText(news.getText());
-
+        newsFromDb.setPicture(news.getPicture());
         return newsRepo.save(newsFromDb);
     }
 
