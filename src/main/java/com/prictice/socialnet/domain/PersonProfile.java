@@ -1,13 +1,12 @@
 package com.prictice.socialnet.domain;
 
-import lombok.*;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "person_profile")
 public class PersonProfile {
@@ -25,12 +24,4 @@ public class PersonProfile {
     private LocalDate birthdate;
     @Column(name = "person_id")
     private Long person;
-
-    @OneToMany(mappedBy = "personProfile",
-            orphanRemoval = true)
-    private Set<News> personNews;
-
-    @OneToMany(mappedBy = "personProfile",
-            orphanRemoval = true)
-    private Set<Comment> personComment;
 }

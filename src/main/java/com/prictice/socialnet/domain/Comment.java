@@ -1,12 +1,10 @@
 package com.prictice.socialnet.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "person_comment")
 public class Comment {
@@ -17,13 +15,13 @@ public class Comment {
     @Column(name = "comment_text")
     private String message;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "person_profile_id",
             foreignKey = @ForeignKey(name = "person_comment_id_fk")
     )
     private PersonProfile personProfile;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "news_id",
             foreignKey = @ForeignKey(name = "news_comment_id_fk")
     )

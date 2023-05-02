@@ -1,13 +1,11 @@
 package com.prictice.socialnet.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "person_news")
 public class News {
@@ -20,14 +18,9 @@ public class News {
     @Column(name = "picture")
     private String picture;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "person_profile_id",
             foreignKey = @ForeignKey(name = "person_news_id_fk")
     )
     private PersonProfile personProfile;
-
-    @OneToMany(mappedBy = "news",
-            orphanRemoval = true
-    )
-    private Set<Comment> comments;
 }
