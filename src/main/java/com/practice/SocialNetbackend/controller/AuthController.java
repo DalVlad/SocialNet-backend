@@ -2,7 +2,7 @@ package com.practice.SocialNetbackend.controller;
 
 
 import com.practice.SocialNetbackend.dto.AuthenticationDTO;
-import com.practice.SocialNetbackend.dto.PersonDTO;
+import com.practice.SocialNetbackend.mapper.PersonMapper;
 import com.practice.SocialNetbackend.model.Person;
 import com.practice.SocialNetbackend.security.JWTUtil;
 import com.practice.SocialNetbackend.service.RegistrationService;
@@ -19,11 +19,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -35,22 +33,22 @@ public class AuthController {
     private final PersonValidator personValidator;
     private final RegistrationService registrationService;
     private final JWTUtil jwtUtil;
-    private final ModelMapper modelMapper;
     private final AuthenticationManager authenticationManager;
+    private final PersonMapper personMapper;
 
     @Autowired
-    public AuthController(PersonValidator personValidator, RegistrationService registrationService, JWTUtil jwtUtil, ModelMapper modelMapper, AuthenticationManager authenticationManager) {
+    public AuthController(PersonValidator personValidator, RegistrationService registrationService, JWTUtil jwtUtil, AuthenticationManager authenticationManager, PersonMapper personMapper) {
         this.personValidator = personValidator;
         this.registrationService = registrationService;
         this.jwtUtil = jwtUtil;
-        this.modelMapper = modelMapper;
         this.authenticationManager = authenticationManager;
+        this.personMapper = personMapper;
     }
 
     @PostMapping("/registration")
     @ApiOperation("Registration person")
-    public Map<String, String> registration(@RequestBody @Valid PersonDTO personDTO, BindingResult bindingResult){
-        Person person = convertToPerson(personDTO);
+    public Map<String, String> registration(@RequestBody @Valid AuthenticationDTO authenticationDTO, BindingResult bindingResult){
+        Person person = personMapper.toPerson(authenticationDTO);
         personValidator.validate(person, bindingResult);
         if(bindingResult.hasErrors()){
             throw new PersonNotRegisteringException(ResponseMessageError.createErrorMsg(bindingResult.getFieldErrors()));
@@ -68,10 +66,6 @@ public class AuthController {
         authenticationManager.authenticate(authenticationToken);
         String token = jwtUtil.generateToken(authenticationDTO.getLogin());
         return Map.of("jwt", token);
-    }
-
-    private Person convertToPerson(PersonDTO personDTO){
-        return modelMapper.map(personDTO, Person.class);
     }
 
     @ExceptionHandler

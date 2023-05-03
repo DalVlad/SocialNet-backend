@@ -14,10 +14,6 @@ import java.util.Optional;
 @Repository
 public interface FileRepository extends JpaRepository<File, Long> {
 
-    Optional<File> findByNameAndPathCatalog(String name, PathCatalog pathCatalog);
-
-    long deleteByNameAndPathCatalog(String name, PathCatalog pathCatalog);
-
     @Query("select new com.practice.SocialNetbackend.dto.FileLikeDTO(" +
             "f.id, " +
             "count(fl), " +
@@ -25,5 +21,7 @@ public interface FileRepository extends JpaRepository<File, Long> {
             ") from File f left join f.likes fl where f = :file " +
             "group by f")
     Optional<FileLikeDTO> getFileLikes(@Param("person") Person person, @Param("file") File file);
+
+    long deleteByIdAndPathCatalog(Long id, PathCatalog pathCatalog);
 
 }

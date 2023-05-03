@@ -6,8 +6,8 @@ import com.practice.SocialNetbackend.model.PathCatalog;
 import com.practice.SocialNetbackend.model.Person;
 import com.practice.SocialNetbackend.model.Storage;
 import com.practice.SocialNetbackend.security.PersonDetails;
+import com.practice.SocialNetbackend.service.PersonService;
 import com.practice.SocialNetbackend.service.StorageService;
-import com.practice.SocialNetbackend.service.FileService;
 import com.practice.SocialNetbackend.util.CatalogNotFoundException;
 import com.practice.SocialNetbackend.util.NotCreationException;
 import io.swagger.annotations.ApiOperation;
@@ -23,22 +23,26 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RequestMapping("/catalog")
 public class CatalogController {
-
-
-    private final FileService fileService;
     private final StorageService storageService;
     private final ModelMapper modelMapper;
+    private final PersonService personService;
 
-    public CatalogController(FileService fileService, StorageService storageService, ModelMapper modelMapper) {
-        this.fileService = fileService;
+    public CatalogController(StorageService storageService, ModelMapper modelMapper, PersonService personService) {
         this.storageService = storageService;
         this.modelMapper = modelMapper;
+        this.personService = personService;
     }
 
     @GetMapping
     @ApiOperation("Get all catalog and file")
-    public PathCatalogDTO getCatalogAndFile(@RequestParam("pathCatalog") String pathCatalog){
-        Person person = getPersonDetails().getPerson();
+    public PathCatalogDTO getCatalogAndFile(@RequestParam("pathCatalog") String pathCatalog,
+                                            @RequestParam(value = "l", required = false, defaultValue = "") String login){
+        Person person;
+        if(login.isEmpty() && login.isBlank()){
+            person = getPersonDetails().getPerson();
+        }else {
+            person = personService.getByLogin(login);
+        }
         return convertToPathCatalogDTO(storageService.getByPersonAndPath(person, pathCatalog));
     }
 

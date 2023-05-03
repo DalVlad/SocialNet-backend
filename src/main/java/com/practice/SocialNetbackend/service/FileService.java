@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.EntityManager;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,7 +39,7 @@ public class FileService {
         saveFile.setName(file.getOriginalFilename());
         Storage storage = storageRepository.findByPerson(person)
                 .orElseThrow(() -> new CatalogNotFoundException("Storage not found"));
-        PathCatalog pathCatalogSave = new PathCatalog();
+        PathCatalog pathCatalogSave;
         if(pathCatalog.equals("/")){
             pathCatalogSave = storage.getPathCatalogRoot();
         }else {
@@ -65,22 +64,18 @@ public class FileService {
         fileRepository.save(saveFile);
     }
 
-    public File getFile(Storage storage, String pathCatalogAndNameFile) throws FileNotFoundException, CatalogNotFoundException {
-        String[] catalogNameFileName = separationPathAndFileName(pathCatalogAndNameFile);
-        PathCatalog pathCatalogRoot = storage.getPathCatalogRoot();
-        return fileRepository.findByNameAndPathCatalog(catalogNameFileName[1],
-                        catalogNameFileName[0].equals("/") ? pathCatalogRoot : pathCatalogRoot.getPathCatalogs()
-                .stream().filter((pathCatalog1 -> catalogNameFileName[0].equals(pathCatalog1.getPathName()))).findAny()
-                .orElseThrow(() -> new CatalogNotFoundException("Catalog with name '" + catalogNameFileName[0] + "' not found")))
-                .orElseThrow(() -> new FileNotFoundException("File with name '" + catalogNameFileName[1] + "' in catalog '"+ catalogNameFileName[0] +"' not found"));
+    public File getFile(Storage storage, String pathCatalogAndNameFile) throws FileNotFoundException {
+        String[] catalogNameFileId = separationPathAndFileId(pathCatalogAndNameFile);
+        return fileRepository.findById(Long.parseLong(catalogNameFileId[1]))
+                .orElseThrow(() -> new FileNotFoundException("File with id '" + catalogNameFileId[1] + "' not found"));
     }
 
-    public FileLikeDTO getFileLike(Person person, File file) throws FileNotFoundException, CatalogNotFoundException {
-        return fileRepository.getFileLikes(person, file).orElseThrow(() -> new FileNotFoundException("Like for file with name '" + file.getName() + "' not found"));
+    public FileLikeDTO getFileLike(Person person, File file) throws FileNotFoundException {
+        return fileRepository.getFileLikes(person, file).orElseThrow(() -> new FileNotFoundException("Like for file with id '" + file.getId() + "' not found"));
     }
 
     @Transactional
-    public void setFileLike(Person person, File file) throws FileNotFoundException, CatalogNotFoundException {
+    public void setFileLike(Person person, File file) {
         if(file.getLikes().contains(person)){
             file.getLikes().remove(person);
         }else {
@@ -90,16 +85,16 @@ public class FileService {
     }
 
     @Transactional
-    public long deleteFile(Storage storage, String pathCatalog) throws FileNotFoundException, CatalogNotFoundException {
-        String[] catalogNameFileName = separationPathAndFileName(pathCatalog);
+    public void deleteFile(Storage storage, String pathCatalog) throws FileNotFoundException, CatalogNotFoundException {
+        String[] catalogNameFileId = separationPathAndFileId(pathCatalog);
         PathCatalog pathCatalogRoot = storage.getPathCatalogRoot();
-        return fileRepository.deleteByNameAndPathCatalog(catalogNameFileName[1],
-                catalogNameFileName[0].equals("/") ? pathCatalogRoot : pathCatalogRoot.getPathCatalogs()
-                        .stream().filter((pathCatalog1 -> catalogNameFileName[0].equals(pathCatalog1.getPathName()))).findAny()
-                        .orElseThrow(() -> new CatalogNotFoundException("Catalog with name '" + catalogNameFileName[0] + "' not found")));
+        fileRepository.deleteByIdAndPathCatalog(Long.parseLong(catalogNameFileId[1]),
+                catalogNameFileId[0].equals("/") ? pathCatalogRoot : pathCatalogRoot.getPathCatalogs()
+                        .stream().filter((pathCatalog1 -> catalogNameFileId[0].equals(pathCatalog1.getPathName()))).findAny()
+                        .orElseThrow(() -> new CatalogNotFoundException("Catalog with name '" + catalogNameFileId[0] + "' not found")));
     }
 
-    private String[] separationPathAndFileName(String path){
+    private String[] separationPathAndFileId(String path){
         int lastSlashIndex = path.lastIndexOf("/");
         String[] catalogNameFileName = new String[2];
         catalogNameFileName[0] = path.substring(0, lastSlashIndex == 0 ? 1 : lastSlashIndex);
