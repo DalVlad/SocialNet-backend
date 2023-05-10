@@ -1,21 +1,23 @@
-package com.prictice.socialnet.domain.dto;
+package com.prictice.socialnet.dto;
 
 import com.prictice.socialnet.domain.News;
 import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
 
 @Getter
+@Setter
 public class NewsDto {
-    private final Long id;
-    private final String text;
-    private final String picture;
-    private final String firstName;
-    private final String lastName;
+    private Long id;
+    private String text;
+    private String picture;
+    private Long person;
 
-    public NewsDto(News news){
+    public NewsDto(News news) {
         this.id = news.getId();
         this.text = news.getText();
         this.picture = news.getPicture();
-        this.firstName = news.getPersonProfile().getFirstName();
-        this.lastName = news.getPersonProfile().getLastName();
+        this.person = news.getPersonProfile().getId();
     }
 }

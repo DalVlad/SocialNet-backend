@@ -1,12 +1,13 @@
 package com.prictice.socialnet.service;
 
 import com.prictice.socialnet.domain.News;
-import com.prictice.socialnet.domain.PersonProfile;
+import com.prictice.socialnet.dto.NewsDto;
 import com.prictice.socialnet.repository.NewsRepo;
 import com.prictice.socialnet.utility.exception.NewsNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class NewsService {
@@ -24,13 +25,13 @@ public class NewsService {
                 .orElseThrow(() -> new NewsNotFoundException("News with id: " + id + " not found!"));
     }
 
-    public List<News> findAllByPersonProfileId(Long id){
-        return newsRepo.findAllByPersonProfileId(id);
+    public List<NewsDto> findAllByPersonProfileId(Long id){
+        List<News> newsList = newsRepo.findAllByPersonProfileId(id);
+        return newsList.stream().map(NewsDto::new).collect(Collectors.toList());
     }
 
     public News createNews(News news, Long id){
         news.setPersonProfile(profileService.findById(id));
-
         return newsRepo.save(news);
     }
 

@@ -1,6 +1,7 @@
 package com.prictice.socialnet.controller;
 
 import com.prictice.socialnet.domain.Comment;
+import com.prictice.socialnet.dto.CommentDto;
 import com.prictice.socialnet.service.CommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,20 +18,9 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    /* TODO исправить запрос
-        (возвращает {
-            commment {
-                text,
-                news {
-                    ... ,
-                    personProfile{...}
-                },
-                personProfile{...}
-            }
-        })*/
     @GetMapping("{id}")
-    public ResponseEntity<List<Comment>> findByNewsId(@PathVariable("id") Long id){
-        List<Comment> comments = commentService.findAllByNewsId(id);
+    public ResponseEntity<List<CommentDto>> findByNewsId(@PathVariable("id") Long id){
+        List<CommentDto> comments = commentService.findAllByNewsId(id);
         return ResponseEntity.ok(comments);
     }
 

@@ -1,6 +1,7 @@
 package com.prictice.socialnet.controller;
 
 import com.prictice.socialnet.domain.PersonProfile;
+import com.prictice.socialnet.dto.PersonProfileDto;
 import com.prictice.socialnet.service.PersonProfileService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

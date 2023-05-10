@@ -1,6 +1,7 @@
 package com.prictice.socialnet.controller;
 
 import com.prictice.socialnet.domain.News;
+import com.prictice.socialnet.dto.NewsDto;
 import com.prictice.socialnet.service.NewsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,16 +18,9 @@ public class NewsController {
         this.newsService = newsService;
     }
 
-    /* TODO исправить запрос
-        (возвращает {
-            news {
-                ... ,
-                personProfile{...}
-            }
-        })*/
     @GetMapping("{id}")
-    public ResponseEntity<List<News>> findAllById(@PathVariable("id") Long id) {
-        List<News> personNews = newsService.findAllByPersonProfileId(id);
+    public ResponseEntity<List<NewsDto>> findAllById(@PathVariable("id") Long id) {
+        List<NewsDto> personNews = newsService.findAllByPersonProfileId(id);
         return ResponseEntity.ok(personNews);
     }
 

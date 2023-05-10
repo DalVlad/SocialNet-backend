@@ -2,6 +2,7 @@ package com.prictice.socialnet.service;
 
 import com.prictice.socialnet.domain.News;
 import com.prictice.socialnet.domain.PersonProfile;
+import com.prictice.socialnet.dto.NewsDto;
 import com.prictice.socialnet.utility.exception.NewsNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +49,7 @@ class NewsServiceTest {
 
     @Test
     void findAllByPersonProfileId() {
-        List<News> test = newsService.findAllByPersonProfileId(personProfile.getId());
+        List<NewsDto> test = newsService.findAllByPersonProfileId(personProfile.getId());
         assertNotNull(test);
     }
 

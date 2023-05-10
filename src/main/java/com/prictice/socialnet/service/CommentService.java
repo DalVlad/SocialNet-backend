@@ -1,10 +1,12 @@
 package com.prictice.socialnet.service;
 
 import com.prictice.socialnet.domain.Comment;
+import com.prictice.socialnet.dto.CommentDto;
 import com.prictice.socialnet.repository.CommentRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CommentService {
@@ -18,8 +20,9 @@ public class CommentService {
         this.newsService = newsService;
     }
 
-    public List<Comment> findAllByNewsId(Long id){
-        return commentRepo.findAllByNewsId(id);
+    public List<CommentDto> findAllByNewsId(Long id){
+        List<Comment> commentList = commentRepo.findAllByNewsId(id);
+        return commentList.stream().map(CommentDto::new).collect(Collectors.toList());
     }
 
     public Comment createComment(Comment comment, Long personId, Long newsId){

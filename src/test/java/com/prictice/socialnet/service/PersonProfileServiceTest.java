@@ -49,7 +49,7 @@ class PersonProfileServiceTest {
     void findByIdTest(){
         assertThrows(
                 PersonNotFoundException.class,
-                () -> personProfileService.findById(2L),
+                () -> personProfileService.findById(4L),
                 "Profile was found!"
         );
     }
