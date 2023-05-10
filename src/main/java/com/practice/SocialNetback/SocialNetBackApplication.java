@@ -1,4 +1,4 @@
-package com.practica.SocialNet_back;
+package com.practice.SocialNetback;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
