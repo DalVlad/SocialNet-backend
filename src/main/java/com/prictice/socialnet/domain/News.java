@@ -3,6 +3,7 @@ package com.prictice.socialnet.domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -23,4 +24,7 @@ public class News {
             foreignKey = @ForeignKey(name = "person_news_id_fk")
     )
     private PersonProfile personProfile;
+
+    @OneToMany
+    private Set<NewsLike> likes = new HashSet<>();
 }

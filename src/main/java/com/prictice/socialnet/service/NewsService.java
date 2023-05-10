@@ -1,6 +1,8 @@
 package com.prictice.socialnet.service;
 
 import com.prictice.socialnet.domain.News;
+import com.prictice.socialnet.domain.NewsLike;
+import com.prictice.socialnet.domain.PersonProfile;
 import com.prictice.socialnet.dto.NewsDto;
 import com.prictice.socialnet.repository.NewsRepo;
 import com.prictice.socialnet.utility.exception.NewsNotFoundException;
@@ -33,6 +35,19 @@ public class NewsService {
     public News createNews(News news, Long id){
         news.setPersonProfile(profileService.findById(id));
         return newsRepo.save(news);
+    }
+
+    public void setLike(News news, Long id){
+        NewsLike newsLike = new NewsLike();
+        newsLike.setNews(news);
+        newsLike.setPersonProfile(profileService.findById(id));
+
+        if (news.getLikes().contains(newsLike)) {
+            news.getLikes().remove(newsLike);
+        } else {
+            news.getLikes().add(newsLike);
+        }
+        newsRepo.save(news);
     }
 
     public News updateNews(News newsFromDb, News news){

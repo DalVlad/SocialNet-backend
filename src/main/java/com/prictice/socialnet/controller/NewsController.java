@@ -24,6 +24,11 @@ public class NewsController {
         return ResponseEntity.ok(personNews);
     }
 
+    @PostMapping("like")
+    public void likeNews(@RequestBody News news, @RequestParam("personId") Long id){
+        newsService.setLike(news, id);
+    }
+
     @PostMapping
     public ResponseEntity<?> createNews(@RequestBody News news, @RequestParam("personId") Long id) {
         newsService.createNews(news, id);
