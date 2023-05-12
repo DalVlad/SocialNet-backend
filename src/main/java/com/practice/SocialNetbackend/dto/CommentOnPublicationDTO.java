@@ -6,7 +6,7 @@ public class CommentOnPublicationDTO {
 
     private Long id;
     private Long publication_id;
-    private Long client_id;
+    private Long person_id;
     private String textOfComment;
 
 }

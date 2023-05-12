@@ -1,6 +1,7 @@
 package com.practice.SocialNetbackend.dto;
 
-import com.practice.SocialNetbackend.model.Client;
+
+import com.practice.SocialNetbackend.model.Person;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -9,5 +10,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class CommentCreationDTO {
     CommentOnPublicationDTO commentOnPublicationDTO;
-    Client client;
+    Person person;
 }

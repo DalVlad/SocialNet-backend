@@ -28,11 +28,24 @@ public class Person {
     @Column(name = "login")
     private String login;
 
-
     @NotBlank
     @NotNull
     @Column(name = "password")
     private String password;
+
+
+
+    @Column(name = "user_name")
+    private String user_name;
+
+    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
+    private List<Member> members;
+
+    @OneToMany(mappedBy = "person")
+    private List<CommentOnPublication> commentOnPublications;
+
+
+
 
     @OneToMany(mappedBy = "person")
     private List<Storage> storages;

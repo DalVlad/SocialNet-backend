@@ -3,7 +3,10 @@ package com.practice.SocialNetbackend.controller;
 
 import com.practice.SocialNetbackend.dto.AuthenticationDTO;
 import com.practice.SocialNetbackend.dto.PersonDTO;
+import com.practice.SocialNetbackend.model.CommentOnPublication;
+import com.practice.SocialNetbackend.model.Member;
 import com.practice.SocialNetbackend.model.Person;
+import com.practice.SocialNetbackend.model.Storage;
 import com.practice.SocialNetbackend.security.JWTUtil;
 import com.practice.SocialNetbackend.service.RegistrationService;
 import com.practice.SocialNetbackend.util.PersonNotRegisteringException;
@@ -23,6 +26,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -71,7 +75,17 @@ public class AuthController {
     }
 
     private Person convertToPerson(PersonDTO personDTO){
-        return modelMapper.map(personDTO, Person.class);
+        Person person = new Person();
+        person.setUser_name(personDTO.getUser_name());
+        person.setLogin(personDTO.getLogin());
+        person.setPassword(personDTO.getPassword());
+        List<Member> members = new LinkedList<>();
+        person.setMembers(members);
+        List<CommentOnPublication> commentOnPublication = new LinkedList<>();
+        person.setCommentOnPublications(commentOnPublication);
+        List<Storage> storages = new LinkedList<>();
+        person.setStorages(storages);
+        return person;
     }
 
     @ExceptionHandler

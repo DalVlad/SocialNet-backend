@@ -11,10 +11,15 @@ import javax.validation.constraints.Size;
 @Setter
 public class PersonDTO {
 
+    private Long id;
+
     @Size(min = 3, max = 255, message = "login должен быть от 3 до 255 символов")
     @NotBlank
     @NotNull
     private String login;
+
+    @NotNull
+    private String user_name;
 
     @NotBlank
     @NotNull

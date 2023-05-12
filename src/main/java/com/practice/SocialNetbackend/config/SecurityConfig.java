@@ -37,8 +37,7 @@ public class SecurityConfig{
                 .authorizeHttpRequests((authz) -> authz
                         .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .antMatchers("/auth/login", "/error", "/auth/registration")
-                        .permitAll()
-                        .anyRequest().authenticated())
+                        .permitAll())
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()

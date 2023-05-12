@@ -21,8 +21,8 @@ public class Member {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "client_id", referencedColumnName = "id")
-    private Client client;
+    @JoinColumn(name = "person_id", referencedColumnName = "id")
+    private Person person;
 
     @ManyToOne
     @JoinColumn(name = "community_id", referencedColumnName = "id")

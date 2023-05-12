@@ -27,17 +27,17 @@ public class MemberService {
 
     @Transactional
     public void addMember(Long clientID, String communityName, CommunityRoles role){                                  //ПОДПИСКА
-        Client client = new Client();
-        client.setId(clientID);
+        Person person = new Person();
+        person.setId(clientID);
 
         Community community = new Community();
         community.setId(communityRepository.findIdByName(communityName));
 
-        repository.save(new Member(null, client, community, matchRole(role)));
+        repository.save(new Member(null, person, community, matchRole(role)));
     }
 
     @Transactional
-    public void setNewRole(Long clientId, Long communityId, String role){
+    public void setNewRole(Long personId, Long communityId, String role){
         Long memberRoleID = null;
         if  (role.equals(ADMIN.toString()))
             memberRoleID = 1L;
@@ -47,7 +47,7 @@ public class MemberService {
             memberRoleID = 3L;
         else if (role.equals(SUBSCRIBER.toString()))
             memberRoleID = 4L;
-        repository.setNewRole(clientId, memberRoleID, communityId);
+        repository.setNewRole(personId, memberRoleID, communityId);
     }
 
     public MemberRole matchRole(CommunityRoles role){
@@ -65,9 +65,9 @@ public class MemberService {
     }
 
     @Transactional
-    public void deleteMember(Long clientId, String communityName){                                          //ОТПИСКА (Если он не админ)
-        if (!getRole(clientId, communityName).getRole().equals(ADMIN.toString())){
-            repository.deleteMember(clientId, communityRepository.findIdByName(communityName));
+    public void deleteMember(Long personId, String communityName){                                          //ОТПИСКА (Если он не админ)
+        if (!getRole(personId, communityName).getRole().equals(ADMIN.toString())){
+            repository.deleteMember(personId, communityRepository.findIdByName(communityName));
         }
     }
 
@@ -78,8 +78,8 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberRoleDTO getRole(Long clientId, String communityName){
-        MemberRole memberRole = memberRoleRepository.getMemberRole(communityName, clientId);
+    public MemberRoleDTO getRole(Long personId, String communityName){
+        MemberRole memberRole = memberRoleRepository.getMemberRole(communityName, personId);
         MemberRoleDTO memberRoleDTO = new MemberRoleDTO();
         if (memberRole!=null){
             memberRoleDTO.setRole(memberRole.getRole());
@@ -87,6 +87,12 @@ public class MemberService {
             memberRoleDTO.setRole("NONSUB");
         }
         return memberRoleDTO;
+    }
+
+    public Person getUserId(String login){
+        Person person = repository.findPersonByLogin(login);
+
+        return person;
     }
 
 

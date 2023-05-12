@@ -1,12 +1,14 @@
 package com.practice.SocialNetbackend.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 import java.util.Date;
 
-@Data
 @AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@ToString
+@EqualsAndHashCode
 public class PublicationDTO {
 
     private Long id;

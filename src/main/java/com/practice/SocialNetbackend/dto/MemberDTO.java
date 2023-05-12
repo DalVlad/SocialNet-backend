@@ -1,10 +1,11 @@
 package com.practice.SocialNetbackend.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
-@Data
 @AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class MemberDTO {
     private Long id;
     private String name;

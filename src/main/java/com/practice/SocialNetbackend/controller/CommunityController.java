@@ -6,6 +6,8 @@ import com.practice.SocialNetbackend.dto.MemberDTO;
 import com.practice.SocialNetbackend.model.Community;
 import com.practice.SocialNetbackend.service.CommunityService;
 import com.practice.SocialNetbackend.service.MemberService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,8 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-//@Api("Контроллер сообществ")
+@CrossOrigin
+@Api("Контроллер сообществ")
 @RestController
 @RequestMapping("/community")
 public class CommunityController {
@@ -27,7 +29,7 @@ public class CommunityController {
     @Autowired
     private MemberService memberService;
 
-    //@ApiOperation("Вывод всех сообществ")
+    @ApiOperation("Вывод всех сообществ")
     @GetMapping("/all")
     public ResponseEntity<List<CommunityDTO>> getAllCommunity(){
         return new ResponseEntity<>(communityService.getAllCommunity()
@@ -35,8 +37,7 @@ public class CommunityController {
                 .map(this::convertToCommunityDTO)
                 .collect(Collectors.toList()), HttpStatus.OK);
     }
-
-    //@ApiOperation("Вывод страницы сообщества")
+    @ApiOperation("Вывод страницы сообщества")
     @GetMapping("/{nameOfCommunity}")
     public ResponseEntity<CommunityDTO> getCommunityPage(@PathVariable("nameOfCommunity") String name){
         if (communityService.getByName(name).isPresent())
@@ -44,7 +45,7 @@ public class CommunityController {
         else return null;
     }
 
-    //@ApiOperation("Создание сообщества")
+    @ApiOperation("Создание сообщества")
     @PostMapping("/create")
     public ResponseEntity<CommunityDTO> createCommunity (@RequestBody CommunityCreationDTO communityCreationDTO){
         CommunityDTO communityDTO = communityCreationDTO.getCommunityDTO();
@@ -55,25 +56,12 @@ public class CommunityController {
     }
 
 
-    //@ApiOperation("Удаление сообщества")
+    @ApiOperation("Удаление сообщества")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteCommunity (@PathVariable("id") Long id){
         communityService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
-
-
-
-
-
-//    //@ApiOperation("Редактирование сообщества")                                    //TODO
-//    @PutMapping("/update")
-//    public ResponseEntity<CommunityDTO> updateCommunity (@RequestBody CommunityDTO communityDTO){
-//        communityService.addCommunity(convertToCommunity(communityDTO));
-//        return new ResponseEntity<>(communityDTO, HttpStatus.CREATED);
-//    }
 
 
 

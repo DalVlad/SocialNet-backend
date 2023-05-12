@@ -23,8 +23,8 @@ public class CommentOnPublication {
     private Publication publication;
 
     @ManyToOne
-    @JoinColumn(name = "client_id", referencedColumnName = "id")
-    private Client client;
+    @JoinColumn(name = "person_id", referencedColumnName = "id")
+    private Person person;
 
     @Column(name = "text_of_comment")
     private String textOfComment;

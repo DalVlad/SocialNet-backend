@@ -10,6 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface MemberRoleRepository extends JpaRepository<MemberRole, Long> {
 
     @Transactional
-    @Query("from MemberRole as mr inner join mr.members as m inner join m.community as c where m.client.id = :clientID and c.name = :communityName")
-    MemberRole getMemberRole(@Param("communityName") String communityName, @Param("clientID") Long clientID);
+    @Query("from MemberRole as mr inner join mr.members as m inner join m.community as c where m.person.id = :personID and c.name = :communityName")
+    MemberRole getMemberRole(@Param("communityName") String communityName, @Param("personID") Long personID);
 }
